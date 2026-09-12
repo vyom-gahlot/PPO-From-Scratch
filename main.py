@@ -60,4 +60,6 @@ print("Dones:", len(dones))
 print("Log probs:", len(log_probs))
 print("Values:", len(values))
 
+torch.save(actor.state_dict(), "actor.pth")
+
 env.close()

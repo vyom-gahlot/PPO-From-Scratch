@@ -19,6 +19,7 @@ The implementation contains:
 * Critic loss
 * Separate Actor and Critic optimizers
 * Training loop
+* Trained and untrained agent evaluation
 
 The environment used for the proof of concept is **CartPole-v1**.
 
@@ -26,15 +27,19 @@ The environment used for the proof of concept is **CartPole-v1**.
 
 ```text
 ppo-from-scratch/
-├── main.py       # Training loop and orchestration
-├── agent.py      # Actor and Critic networks
-├── rollout.py    # Experience collection
-├── gae.py        # GAE and return calculation
-├── ppo.py        # PPO objective and losses
+├── main.py          # Training loop and orchestration
+├── agent.py         # Actor and Critic networks
+├── rollout.py       # Experience collection
+├── gae.py           # GAE and return calculation
+├── ppo.py           # PPO objective and losses
+├── untrained.py     # Watch an untrained agent play
+├── evaluate.py      # Watch the trained agent play
 ├── README.md
 ├── requirements.txt
 └── .gitignore
 ```
+
+> `actor.pth` is generated after training but is ignored by Git.
 
 ## Architecture
 
@@ -189,17 +194,55 @@ Example training progression:
 
 ```text
 Iteration 0:   reward = 28
-Iteration 100: reward = 22
-Iteration 300: reward = 40
-Iteration 500: reward = 84
-Iteration 550: reward = 141
-Iteration 650: reward = 217
-Iteration 700: reward = 238
-Iteration 800: reward = 341
-Iteration 900: reward = 256
+Iteration 100:  reward = 22
+Iteration 300:  reward = 40
+Iteration 500:  reward = 84
+Iteration 550:  reward = 141
+Iteration 650:  reward = 217
+Iteration 700:  reward = 238
+Iteration 800:  reward = 341
+Iteration 900:  reward = 256
 ```
 
 The training is intentionally minimal and somewhat noisy because this project focuses on understanding the core PPO implementation rather than maximizing CartPole performance.
+
+## Watching the Agent
+
+The project includes two evaluation scripts.
+
+### Untrained Agent
+
+To watch a randomly initialized Actor play CartPole:
+
+```bash
+python untrained.py
+```
+
+This creates a fresh Actor with randomly initialized parameters and renders its gameplay.
+
+### Trained Agent
+
+First train the agent:
+
+```bash
+python main.py
+```
+
+The trained Actor is saved as:
+
+```text
+actor.pth
+```
+
+Then run:
+
+```bash
+python evaluate.py
+```
+
+This loads the trained Actor and renders it playing CartPole.
+
+This makes it possible to directly compare the behavior of the untrained and trained policies.
 
 ## Requirements
 
@@ -216,13 +259,23 @@ pip install torch gymnasium[classic-control]
 
 ## Running
 
-Run the training loop with:
+### 1. Train
 
 ```bash
 python main.py
 ```
 
-The program will train the Actor-Critic agent on CartPole and print rollout rewards during training.
+### 2. Watch the untrained agent
+
+```bash
+python untrained.py
+```
+
+### 3. Watch the trained agent
+
+```bash
+python evaluate.py
+```
 
 ## What I Learned
 
@@ -242,6 +295,8 @@ Topics covered:
 * PPO clipping
 * Actor-Critic optimization
 * Reinforcement learning training loops
+* Model saving and loading
+* Policy evaluation
 
 ## Limitations
 
