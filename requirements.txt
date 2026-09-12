@@ -1,0 +1,11 @@
+# PPO From Scratch
+
+# Reinforcement Learning dependencies
+
+# Deep Learning
+
+torch
+
+# Reinforcement Learning Environment
+
+gymnasium[classic-control]
